@@ -1,0 +1,13 @@
+<form novalidate name="form">
+  First Name:<br>
+  <input name="firstName" type="text" ng-model="formData.firstName">
+  <span ng-show="form.firstName.$error.required">First Name is required.</span>
+  <br>
+  Last Name:<br>
+  <input name=lastName type="text" ng-model="formData.lastName" >
+  <span ng-show="form.lastName.$error.required">Last Name is required.</span>
+   <br><br>
+  <button ng-click="getResponse()">SUBMIT</button>
+</form>
+<p>formData = {{formData}}</p>
+<p>responseData = {{responseData}}</p>
