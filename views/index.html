@@ -45,29 +45,28 @@
     app.factory("checkResponse", function($http, $q){
       return {
         getResponse : function(data){
-                              
-                              var deferred = $q.defer();
-                                $http({
-                                  method : "POST",
-                                  url : "/response",
-                                  data: data,
-                                  headers: {
-                                        'Content-type': 'application/json'
-                                  }
-                                })
-                              .success(function(data) { 
-                                  if(data.firstName.length == 1){
-                                    deferred.reject("Please write more then one letter in firstName.");
-                                  }else{
-                                    deferred.resolve(data);
-                                  }
-                                  
-                              }).error(function(msg, code) {
-                                  deferred.reject(msg);
-                                  
-                              });
-                              return deferred.promise;
-                            }
+          var deferred = $q.defer();
+            $http({
+              method : "POST",
+              url : "/response",
+              data: data,
+              headers: {
+                    'Content-type': 'application/json'
+              }
+            })
+          .success(function(data) { 
+              if(data.firstName.length <= 1){
+                deferred.reject("Please write more then one letter in firstName.");
+              }else{
+                deferred.resolve(data);
+              }
+              
+          }).error(function(msg, code) {
+              deferred.reject(msg);
+              
+          });
+          return deferred.promise;
+        }
       }
       
           
