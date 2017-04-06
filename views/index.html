@@ -42,25 +42,79 @@
       // });
        
     });
+    app.factory("checkResponse", function($http, $q){
+      return {
+        getResponse : function(data){
+                              
+                              var deferred = $q.defer();
+                                $http({
+                                  method : "POST",
+                                  url : "/response",
+                                  data: data,
+                                  headers: {
+                                        'Content-type': 'application/json'
+                                  }
+                                })
+                              .success(function(data) { 
+                                  if(data.firstName.length == 1){
+                                    deferred.reject("Please write more then one letter in firstName.");
+                                  }else{
+                                    deferred.resolve(data);
+                                  }
+                                  
+                              }).error(function(msg, code) {
+                                  deferred.reject(msg);
+                                  
+                              });
+                              return deferred.promise;
+                            }
+      }
+      
+          
+        // $http({
+        //     method : "POST",
+        //     url : "/response",
+        //     data: $scope.formData,
+        //     headers: {
+        //           'Content-type': 'application/json'
+        //     }
+        //   }).then(function mySucces(response) {
+        //     $scope.responseData = response.data;
+        //   }, function myError(response)  {
+        //       $scope.responseData =  response.statusText;
+        //   });
+       
 
-    app.controller("myCtrl",function($scope, $http){
-      $scope.getResponse = function(){
-        if($scope.form.$valid){
-          $http({
-            method : "POST",
-            url : "/response",
-            data: $scope.formData,
-            headers: {
-                  'Content-type': 'application/json'
-            }
-          }).then(function mySucces(response) {
-             $scope.responseData = response.data;
-          }, function myError(response)  {
-              $scope.responseData =  response.statusText;
-          });
-        }
+    })
+    app.controller("myCtrl",function( $scope, $http, checkResponse){
+      $scope.response = function(){
+        var promise = checkResponse.getResponse($scope.formData);
+        promise.then(function(successData) {
+            $scope.responseData = successData;
+          }, function(errorData) {
+             $scope.responseData = errorData;
+          }, function(update) {
+            alert('Got notification: ' + update);
+          }); 
+      }
+      // $scope.getResponse = function(){
+      //   if($scope.form.$valid){
+      //     var checkResponse  = new checkResponse();
+      //     // $http({
+      //     //   method : "POST",
+      //     //   url : "/response",
+      //     //   data: $scope.formData,
+      //     //   headers: {
+      //     //         'Content-type': 'application/json'
+      //     //   }
+      //     // }).then(function mySucces(response) {
+      //     //   $scope.responseData = response.data;
+      //     // }, function myError(response)  {
+      //     //     $scope.responseData =  response.statusText;
+      //     // });
+      //   }
         
-      };
+      // };
       
 
     });
