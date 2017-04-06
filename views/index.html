@@ -25,18 +25,21 @@
 
     app.controller("myCtrl",function($scope, $http){
       $scope.getResponse = function(){
-        $http({
-          method : "POST",
-          url : "/response",
-          data: $scope.formData,
-          headers: {
-                'Content-type': 'application/json'
-          }
-        }).then(function mySucces(response) {
-           $scope.responseData = response.data;
-        }, function myError(response)  {
-            $scope.responseData =  response.statusText;
-        });
+        if($scope.form.$valid){
+          $http({
+            method : "POST",
+            url : "/response",
+            data: $scope.formData,
+            headers: {
+                  'Content-type': 'application/json'
+            }
+          }).then(function mySucces(response) {
+             $scope.responseData = response.data;
+          }, function myError(response)  {
+              $scope.responseData =  response.statusText;
+          });
+        }
+        
       };
       
 
