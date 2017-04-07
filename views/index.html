@@ -96,6 +96,19 @@
             alert('Got notification: ' + update);
           }); 
       }
+      $scope.watchVar = 0;
+      $scope.addWatchVar = function(){
+        $scope.watchVar++;
+      }
+      
+      if($scope.watchVar == 2){
+        $scope.observerForWatchVar  = $scope.watchVar;
+      }
+      $scope.$watch('watchVar', function(newVal, oldVal){
+        if(newVal%2 == 0){
+          $scope.observerForWatchVar  = $scope.watchVar;
+        }
+      });
       // $scope.getResponse = function(){
       //   if($scope.form.$valid){
       //     var checkResponse  = new checkResponse();
