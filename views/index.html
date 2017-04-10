@@ -66,7 +66,8 @@
               
           });
           return deferred.promise;
-        }
+        },
+        
       }
       
           
@@ -85,17 +86,49 @@
        
 
     })
-    app.controller("myCtrl",function( $scope, $http, checkResponse){
-      $scope.response = function(){
-        var promise = checkResponse.getResponse($scope.formData);
-        promise.then(function(successData) {
-            $scope.responseData = successData;
-          }, function(errorData) {
-             $scope.responseData = errorData;
-          }, function(update) {
-            alert('Got notification: ' + update);
-          }); 
+    app.controller("myCtrl",function( $scope, $http, $timeout, checkResponse){
+      function holdOn(responseData){
+          return $timeout(function(){
+            return responseData;
+          },200)
+        
       }
+      
+      $scope.response = function(){
+        var startTime = Date.now();
+        checkResponse.getResponse($scope.formData)
+        .then(function(successData){
+           $scope.apiResponseTime = Date.now()-startTime;
+          return holdOn(successData);
+        })
+        .then(function(successData){
+          return holdOn(successData);
+        })
+        .then(function(successData){
+          return holdOn(successData);
+        })
+        .then(function(successData){
+          return holdOn(successData);
+        })
+        .then(function(successData) {
+          $scope.responseData = successData;
+          $scope.processTime = Date.now()-startTime;
+        }, function(errorData) {
+           $scope.responseData = errorData;
+        }, function(update) {
+          alert('Got notification: ' + update);
+        }); 
+        
+        // var promiseTwo = promiseOne.then(function(successData) {
+        //     $scope.responseData = successData;
+        //   }, function(errorData) {
+        //     $scope.responseData = errorData;
+        //   }, function(update) {
+        //     alert('Got notification: ' + update);
+        //   }); 
+      }
+      
+      
       $scope.watchVar = 0;
       $scope.addWatchVar = function(){
         $scope.watchVar++;
