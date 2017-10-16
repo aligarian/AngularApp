@@ -1,5 +1,5 @@
 # AngularApp
-A small app for jeevan
+A small crud app.
 
 Please clone or copy the code and install by npm.
 
